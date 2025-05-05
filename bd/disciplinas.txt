@@ -1,0 +1,10 @@
+MAT1|Matematica_1|Renata Lemos|Carlos Oliveira,Lucas Almeida,Juliana Martins,Thiago Lima,Roberta Gomes,Felipe Martins,Camila Santos
+LP|Logica_de_Programacao|Renata Lemos|Carlos Oliveira,Mariana Santos,Pedro Costa,Fernanda Lima,Lucas Almeida,Ricardo Souza,Amanda Rocha,Lucas Ferreira,Luana Ribeiro,Roberta Gomes,Vinícius Mendes
+PEST|Programacao_Estruturada|Ricardo Mendes|José Pereira,Pedro Costa,Amanda Rocha,Lucas Ferreira,Thiago Lima,Roberta Gomes
+BD|Banco_de_Dados|Ricardo Mendes|José Pereira,Lucas Almeida,Juliana Martins,Ricardo Souza,Lucas Ferreira,Felipe Martins,Camila Santos,Beatriz Oliveira
+ENGSOFT|Engenharia_de_Software|Sandra Ribeiro|José Pereira,Fernanda Lima,Lucas Almeida,Juliana Martins,Júlia Costa,Thiago Lima,Luana Ribeiro,Felipe Martins,Camila Santos,Beatriz Oliveira,Vinícius Mendes,Isabela Lima
+RCOMP|Redes_de_Computadores|Sandra Ribeiro|Ana Beatriz Silva,Ricardo Souza,Thiago Lima,Luana Ribeiro,Camila Santos,Beatriz Oliveira,Isabela Lima
+ALGO|Algoritmos|Marcos Tavares|Mariana Santos,Pedro Costa,Fernanda Lima,Juliana Martins,Amanda Rocha,Júlia Costa,Thiago Lima,Felipe Martins
+POO|Programacao_Orientada_Objetos|Marcos Tavares|Pedro Costa,Lucas Almeida,Lucas Ferreira,Felipe Martins,Beatriz Oliveira
+SINFO|Sistemas_de_Informacao|João Silva|Carlos Oliveira,Ana Beatriz Silva,Mariana Santos,Fernanda Lima,Lucas Almeida,Ricardo Souza,Thiago Lima
+CCOMP|Ciencia_da_Computacao|João Silva|Ana Beatriz Silva,Fernanda Lima,Ricardo Souza,Lucas Ferreira,Thiago Lima,Luana Ribeiro
