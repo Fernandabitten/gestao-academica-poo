@@ -5,6 +5,12 @@ class Professor(Pessoa):
         super().__init__(nome, cpf, data_nascimento)
         self.__siape = siape
         self.disciplinas = disciplinas if disciplinas is not None else []
+    
+    def adicionar_disciplina(self, disciplina):
+        self.disciplinas.append(disciplina)
+
+    def remover_disciplina(self, codigo_disciplina):
+        self.disciplinas = [d for d in self.disciplinas if d.codigo != codigo_disciplina]
 
     @property
     def siape(self):
