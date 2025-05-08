@@ -1,7 +1,6 @@
 from persistencia import (
     carregar_professores, carregar_alunos, carregar_disciplinas, vincular_disciplinas, definir_caminho
 )
-
 # Definindo os caminhos dos arquivos de dados
 caminho_arquivo_professores = definir_caminho('bd', 'professores.txt')
 caminho_arquivo_alunos = definir_caminho('bd', 'alunos.txt')

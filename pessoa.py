@@ -1,4 +1,6 @@
 from abc import ABC, abstractmethod
+import re
+from datetime import datetime
 
 class Pessoa(ABC):
     def __init__(self, nome, cpf, data_nascimento):
@@ -9,7 +11,19 @@ class Pessoa(ABC):
     @property
     def cpf(self):
         return self.__cpf
+    @staticmethod
+    def validar_cpf (cpf):
+        cpf = re.sub(r'\D','', cpf)
+        return len (cpf) == 11 and cpf.isdigit()
     
+    @staticmethod
+    def validar_data (data_nascimento):
+        try:
+            datetime.strptime(data_nascimento, "%d/%m/%y")
+            return True
+        except ValueError:
+            return False
+           
     @abstractmethod
     def exibir_dados(self):
         pass
