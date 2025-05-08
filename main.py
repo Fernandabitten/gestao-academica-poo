@@ -1,6 +1,12 @@
 from persistencia import (
     carregar_professores, carregar_alunos, carregar_disciplinas, vincular_disciplinas, definir_caminho
 )
+def menu_principal():
+    print ("==Sistema Acadêmico==")
+
+    nome = input("Digite seu nome:")
+    cpf =  input ("Digite seu CPF:")
+    nascimento = input ("Digite sua data de nascimento")
 
 # Definindo os caminhos dos arquivos de dados
 caminho_arquivo_professores = definir_caminho('bd', 'professores.txt')
