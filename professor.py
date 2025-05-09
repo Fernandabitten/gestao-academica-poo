@@ -15,6 +15,10 @@ class Professor(Pessoa):
     @property
     def siape(self):
         return self.__siape
+    
+    @siape.setter
+    def siape(self, novo_siape):  # grazy
+        self.__siape = novo_siape
 
     def exibir_dados(self):
         print(f"Professor: {self.nome}")

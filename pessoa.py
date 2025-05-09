@@ -11,6 +11,11 @@ class Pessoa(ABC):
     @property
     def cpf(self):
         return self.__cpf
+    
+    @cpf.setter
+    def cpf(self, novo_cpf):  #grazy
+        self.__cpf = self.validar_cpf(novo_cpf)
+
     @staticmethod
     def validar_cpf (cpf):
         cpf = re.sub(r'\D','', cpf)
