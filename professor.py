@@ -9,6 +9,10 @@ class Professor(Pessoa):
     @property
     def siape(self):
       return self.__siape
+    
+    @siape.setter
+    def siape(self, novo_siape): 
+        self.__siape = novo_siape
 
     def adicionar_disciplina(self, disciplina):
       if disciplina not in self.disciplinas:
@@ -23,6 +27,7 @@ class Professor(Pessoa):
         print(f"Disciplina {disciplina.nome} removida do professor {self.nome}..")
       else:
         print(f"Disciplina não encontrada na lista do professor {self.nome}.")
+        return self.__siape
 
     def exibir_dados(self):
       print(f"Professor: {self.nome}")

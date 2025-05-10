@@ -12,6 +12,10 @@ class Aluno(Pessoa):
     def matricula(self):
         return self.__matricula
     
+    @matricula.setter
+    def matricula(self, nova_matricula):  # grazy
+        self.__matricula = nova_matricula
+    
     @property
     def notas(self):
         return self.__notas 
