@@ -1,6 +1,6 @@
 from relatorios import *
 from cadastro import *
-# from persistencia import salvar_alunos
+from persistencia import *
 
 def menu_alunos(lista_alunos, lista_disciplinas):
   while True:
@@ -9,15 +9,18 @@ def menu_alunos(lista_alunos, lista_disciplinas):
     print("2. Listar alunos")
     print("3. Buscar aluno por matrícula")
     print("4. Matricular aluno em disciplina")
-    print("5. Adicionar nota")
-    print("6. Voltar")
+    print("5. Desmatricular aluno de uma disciplina")
+    print("6. Adicionar nota")
+    print("7. Calcular média por disciplina")
+    print("8. Voltar")
+
     opcao = input("Escolha uma opção: ")
 
     if opcao == "1":
       print()
       print("1. Cadastrar novo aluno")
       print()      
-      nome = input("Nome: ")
+      nome = input("Nome: ").title()
       cpf = input("CPF: ")
       data = input("Data de nascimento (dd/mm/aaaa): ")
       matricula = input("Matrícula: ")
@@ -37,64 +40,71 @@ def menu_alunos(lista_alunos, lista_disciplinas):
       mat = input("Informe a matrícula: ")
       for aluno in lista_alunos:
         if aluno.matricula == mat:
-          print(aluno.exibir_dados())
+          print('========================')
+          aluno.exibir_dados()
+          print()
           break
-        else:
-          print("Aluno não encontrado.")
+      else:
+        print("Aluno não encontrado.")
     elif opcao == "4":
       print()
       print("4. Matricular aluno em disciplina")
       print()
       matricula = input("Informe a matrícula do aluno: ")
-      aluno_encontrado = None
-      for aluno in lista_alunos:
-        if aluno.matricula == matricula:
-          aluno_encontrado = aluno
-          break
-      if aluno_encontrado:
-        codigo = input("Código da disciplina: ")
-        for disc in lista_disciplinas:
-          if disc.codigo == codigo:
-            aluno_encontrado.matricular_em_disciplina(disc)
-            disc.adicionar_aluno(aluno_encontrado)
-            print("Aluno matriculado com sucesso.")
-            break
-          else:
-            print("Disciplina não encontrada.")
+      codigo_disciplina = input("Código da disciplina: ").upper()
+      if matricular_aluno_em_disciplina(lista_alunos, lista_disciplinas, matricula, codigo_disciplina):
+        salvar_alunos(lista_alunos, caminho_arquivo_alunos)
+        salvar_disciplinas(lista_disciplinas, caminho_arquivo_disciplinas)
+        print("Aluno matriculado com sucesso.")
       else:
-          print("Aluno não encontrado.")
+        print("Erro ao matricular.")
     elif opcao == "5":
       print()
-      print("5. Adicionar nota")
-      print()      
+      print("5. Desmatricular aluno de uma disciplina")
+      print()
       matricula = input("Informe a matrícula do aluno: ")
-      aluno_encontrado = None
-      for aluno in lista_alunos:
-        if aluno.matricula == matricula:
-            aluno_encontrado = aluno
-            break
-      if aluno_encontrado:
-        codigo = input("Código da disciplina: ")
-        for disc in aluno_encontrado.disciplinas:
-          if disc.codigo == codigo:
-            try:
-              nota = float(input("Nota: "))
-              aluno_encontrado.adicionar_nota(disc, nota)
-              print("Nota adicionada com sucesso.")
-            except ValueError:
-              print("Nota inválida.")
-            break
-          else:
-            print("Aluno não está matriculado nessa disciplina.")
+      codigo_disciplina = input("Código da disciplina: ").upper()
+      if desmatricular_aluno_de_disciplina(lista_alunos, lista_disciplinas, matricula, codigo_disciplina):
+        salvar_alunos(lista_alunos, caminho_arquivo_alunos)
+        salvar_disciplinas(lista_disciplinas, caminho_arquivo_disciplinas)
+        print("Aluno desmatriculado com sucesso.")
+      else:
+        print("Erro ao desmatricular.")
+    elif opcao == "6":
+      print()
+      print("6. Adicionar nota")
+      print() 
+      matricula = input("Informe a matrícula do aluno: ")     
+      codigo_disciplina = input("Código da disciplina: ").upper()
+      indice = int(input("Qual nota deseja alterar (1, 2 ou 3)? ")) - 1
+      nota = float(input("Digite a nova nota: ").replace(',', '.'))
+
+      if adicionar_nota_para_aluno(lista_alunos, lista_disciplinas, matricula, codigo_disciplina, indice, nota):
+        salvar_alunos(lista_alunos, caminho_arquivo_alunos)
+        print("Nota adicionada com sucesso.")
+      else:
+        print("Não foi possível adicionar a nota.")
+    elif opcao == "7":
+      print()
+      print("7. Calcular média por disciplina")
+      print()
+      matricula = input("Informe a matrícula do aluno: ")
+      aluno = next((a for a in lista_alunos if a.matricula == matricula), None)
+
+      if aluno:
+          medias = aluno.calcular_media_por_disciplina()
+          print()
+          print(f"\nMédias do aluno {aluno.nome}:")
+          print('================================')
+          for nome_disciplina, media in medias.items():
+            print(f"{nome_disciplina}: {media:.2f}")
+            print('---------------------------------')
       else:
         print("Aluno não encontrado.")
-    elif opcao == "6":
+    elif opcao == "8":
       print("Voltando ao menu principal...")
       break
-    else:
-      print("Opção inválida.")
-
-def menu_professores(lista_professores):
+def menu_professores(lista_professores, lista_disciplinas):
   while True:
     print("\nMenu de Professores:")
     print("1. Cadastrar novo professor")
@@ -109,7 +119,7 @@ def menu_professores(lista_professores):
       print()
       print("1. Cadastrar novo professor")
       print()
-      nome = input("Nome: ")
+      nome = input("Nome: ").title()
       cpf = input("CPF: ")
       data = input("Data de nascimento (dd/mm/aaaa): ")
       siape = input("SIAPE: ")
@@ -140,28 +150,38 @@ def menu_professores(lista_professores):
       print("4. Adicionar disciplina ao professor")
       print()
       siape = input("Informe o SIAPE do professor: ")
-      for prof in lista_professores:
-        if prof.siape == siape:
-          codigo = input("Código da disciplina a adicionar: ")
-          nome = input("Nome da disciplina: ")
-          from disciplina import Disciplina
-          nova_disc = Disciplina(codigo, nome)
-          prof.adicionar_disciplina(nova_disc)
-          print("Disciplina adicionada ao professor.")
-          break
+      professor_encontrado = next((p for p in lista_professores if p.siape == siape), None)
+      if professor_encontrado:
+        codigo_disciplina = input("Código da disciplina: ").upper()
+        disciplina_encontrada = next((d for d in lista_disciplinas if d.codigo.upper() == codigo_disciplina), None)
+        if disciplina_encontrada:
+          # Usa o método da disciplina, que garante consistência e desvincula professor anterior
+          disciplina_encontrada.adicionar_professor(professor_encontrado)
+          salvar_professores(lista_professores, caminho_arquivo_professores) 
+          salvar_disciplinas(lista_disciplinas, caminho_arquivo_disciplinas) 
+        else:
+          print("Disciplina não encontrada.")
       else:
         print("Professor não encontrado.")
     elif opcao == "5":
       print()
       print("5. Remover disciplina do professor")
       print()
-      siape = input("SIAPE do professor: ")
-      for prof in lista_professores:
-        if prof.siape == siape:
-          codigo = input("Código da disciplina a remover: ")
-          prof.remover_disciplina(codigo)
-          print("Disciplina removida.")
-          break
+      siape = input("Informe o SIAPE do professor: ")
+      professor_encontrado = next((p for p in lista_professores if p.siape == siape), None)
+      if professor_encontrado:
+        codigo_disciplina = input("Código da disciplina: ").upper()
+        disciplina_encontrada = next((d for d in lista_disciplinas if d.codigo.upper() == codigo_disciplina), None)
+        if disciplina_encontrada:
+          # Verifica se o professor realmente é o responsável pela disciplina
+          if disciplina_encontrada.professor_responsavel == professor_encontrado:
+            disciplina_encontrada.remover_professor()
+            salvar_professores(lista_professores, caminho_arquivo_professores)
+            salvar_disciplinas(lista_disciplinas, caminho_arquivo_disciplinas)  
+          else:
+            print(f"O professor {professor_encontrado.nome} não é responsável pela disciplina {disciplina_encontrada.nome}.")         
+        else:
+          print("Disciplina não encontrada.")
       else:
         print("Professor não encontrado.")
     elif opcao == "6":
@@ -170,21 +190,22 @@ def menu_professores(lista_professores):
     else:
       print("Opção inválida.")
 
-def menu_disciplinas(lista_disciplinas):
+def menu_disciplinas(lista_disciplinas, lista_professores):
   while True:
     print("\nMenu de Disciplinas:")
     print("1. Cadastrar nova disciplina")
     print("2. Listar disciplinas")
     print("3. Buscar disciplina por código")
-    print("4. Voltar")
+    print("4. Atribuir professor a uma disciplina")
+    print("5. Voltar")
     opcao = input("Escolha uma opção: ")
 
     if opcao == "1":
       print()
       print("1. Cadastrar nova disciplina")
       print()
-      codigo = input("Código: ")
-      nome = input("Nome: ")
+      codigo = input("Código: ").upper()
+      nome = input("Nome: ").title().replace(" ", "_")
       cadastrar_disciplina(lista_disciplinas, codigo, nome)
     elif opcao == "2":
       print()
@@ -198,9 +219,9 @@ def menu_disciplinas(lista_disciplinas):
       print()
       print("3. Buscar disciplina por código")
       print()
-      codigo = input("Informe o código da disciplina: ")
+      codigo = input("Informe o código da disciplina: ").upper()
       for disc in lista_disciplinas:
-        if disc.codigo == codigo:
+        if disc.codigo.upper() == codigo:
           print('========================')
           disc.exibir_dados()
           print()
@@ -208,6 +229,23 @@ def menu_disciplinas(lista_disciplinas):
       else:
         print("Disciplina não encontrada.")
     elif opcao == "4":
+      print()
+      print("5. Atribuir professor a uma disciplina")
+      print()
+      codigo_disciplina = input("Informe o código da disciplina: ").upper()
+      disciplina_encontrada = next((d for d in lista_disciplinas if d.codigo.upper() == codigo_disciplina), None)      
+      if disciplina_encontrada:
+        siape = input("Informe o SIAPE do professor: ")
+        professor_encontrado = next((p for p in lista_professores if p.siape == siape), None)        
+        if professor_encontrado:
+          disciplina_encontrada.adicionar_professor(professor_encontrado)
+          salvar_professores(lista_professores, caminho_arquivo_professores)
+          salvar_disciplinas(lista_disciplinas, caminho_arquivo_disciplinas) 
+        else:
+          print("Professor não encontrado.")
+      else:
+        print("Disciplina não encontrada.")
+    elif opcao == "5":
       print("Voltando ao menu principal...")
       break
     else:
@@ -271,16 +309,17 @@ def menu_principal(lista_alunos, lista_professores, lista_disciplinas):
     if opcao == "1":
       menu_alunos(lista_alunos, lista_disciplinas)
     elif opcao == "2":
-      menu_professores(lista_professores)
+      menu_professores(lista_professores, lista_disciplinas)
     elif opcao == "3":
-      menu_disciplinas(lista_disciplinas)
+      menu_disciplinas(lista_disciplinas, lista_professores)
     elif opcao == "4":
       menu_relatorios(lista_alunos, lista_professores, lista_disciplinas)
     elif opcao == "5":
       print("Salvando dados e saindo...")
-      # salvar_alunos("alunos.dat", lista_alunos)
-      # salvar_alunos("professores.dat", lista_professores)
-      # salvar_alunos("disciplinas.dat", lista_disciplinas)
+      salvar_alunos(lista_alunos, caminho_arquivo_alunos)
+      salvar_professores(lista_professores, caminho_arquivo_professores)
+      salvar_disciplinas(lista_disciplinas, caminho_arquivo_disciplinas)
+      print("Dados salvos com sucesso. Até logo!")
       break
     else:
       print("Opção inválida.")
