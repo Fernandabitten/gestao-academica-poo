@@ -82,6 +82,35 @@ def salvar_alunos(alunos, arquivo):
 				partes.append(f"{disciplina.nome},{','.join(map(str, notas))}")
 			f.write('|'.join(partes) + '\n')
 
+def matricular_aluno_em_disciplina(alunos, disciplinas, matricula_aluno, codigo_disciplina):
+	aluno = next((a for a in alunos if a.matricula == matricula_aluno), None)
+	disciplina = next((d for d in disciplinas if d.codigo == codigo_disciplina), None)
+	if aluno is None or disciplina is None:
+		print("Aluno ou disciplina não encontrados.")
+		return False
+	aluno.matricular_em_disciplina(disciplina)
+	return True
+
+def desmatricular_aluno_de_disciplina(alunos, disciplinas, matricula_aluno, codigo_disciplina):
+	aluno = next((a for a in alunos if a.matricula == matricula_aluno), None)
+	disciplina = next((d for d in disciplinas if d.codigo == codigo_disciplina), None)
+	if aluno is None or disciplina is None:
+		print("Aluno ou disciplina não encontrados.")
+		return False
+	aluno.desmatricular_disciplina(disciplina)
+	return True
+
+def adicionar_nota_para_aluno(alunos, disciplinas, matricula_aluno, codigo_disciplina, indice_nota, nota):
+    aluno = next((a for a in alunos if a.matricula == matricula_aluno), None)
+    disciplina = next((d for d in disciplinas if d.codigo == codigo_disciplina), None)
+
+    if aluno is None or disciplina is None:
+        print("Aluno ou disciplina não encontrados.")
+        return False
+
+    aluno.adicionar_nota(disciplina, nota, indice_nota)
+    return True
+
 def carregar_disciplinas(arquivo, professores, alunos):
 	disciplinas = []
 	linhas = ler_arquivo(arquivo)
