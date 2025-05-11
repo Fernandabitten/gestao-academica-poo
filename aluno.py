@@ -1,11 +1,14 @@
 from pessoa import Pessoa
 
 class Aluno(Pessoa):
+    total_alunos = 0    #atributo de classe
+
     def __init__(self, nome, cpf, data_nascimento, matricula, notas=None, disciplinas=None):
         super().__init__(nome, cpf, data_nascimento)
         self.__matricula = matricula
         self.__notas = notas if notas is not None else []
         self.disciplinas = disciplinas if disciplinas is not None else []
+        Aluno.total_alunos += 1
 
     #Para acessar os atributos privados
     @property
@@ -13,12 +16,16 @@ class Aluno(Pessoa):
         return self.__matricula
     
     @matricula.setter
-    def matricula(self, nova_matricula):  # grazy
+    def matricula(self, nova_matricula):  
         self.__matricula = nova_matricula
     
     @property
     def notas(self):
         return self.__notas 
+    
+    @classmethod
+    def exibir_total_cadastrados(cls):
+        print(f"Total de alunos cadastrados: {cls.total_alunos}")
     
     def matricular_em_disciplina(self, disciplina):
         if disciplina not in self.disciplinas:
