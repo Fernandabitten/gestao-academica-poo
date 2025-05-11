@@ -1,4 +1,6 @@
 class Disciplina:
+    total_disciplinas = 0   #atributo de classe
+
     def __init__(self, codigo, nome, professor_responsavel=None, alunos_matriculados=None):
       self.codigo = codigo
       self.nome = nome
@@ -10,6 +12,10 @@ class Disciplina:
         # Desvincula o professor anterior
         self.professor_responsavel.remover_disciplina(self)
         print(f"Professor {self.professor_responsavel.nome} foi desvinculado da disciplina {self.nome}.")
+     
+      @classmethod
+      def exibir_total_cadastrados(cls):
+        print(f"Total de disciplinas cadastradas: {cls.total_disciplinas}")
 
       # Atribui o novo professor
       self.professor_responsavel = professor

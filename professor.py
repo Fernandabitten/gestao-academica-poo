@@ -1,6 +1,8 @@
 from pessoa import Pessoa
 
 class Professor(Pessoa):
+    total_professores = 0   #atributo de classe
+
     def __init__(self, nome, cpf, data_nascimento, siape, disciplinas=None):
         super().__init__(nome, cpf, data_nascimento)
         self.__siape = siape
@@ -13,6 +15,10 @@ class Professor(Pessoa):
     @siape.setter
     def siape(self, novo_siape): 
         self.__siape = novo_siape
+
+    @classmethod
+    def exibir_total_cadastrados(cls):
+        print(f"Total de professores cadastrados: {cls.total_professores}")
 
     def adicionar_disciplina(self, disciplina):
       if disciplina not in self.disciplinas:
