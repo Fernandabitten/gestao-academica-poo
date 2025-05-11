@@ -8,6 +8,7 @@ class Aluno(Pessoa):
         self.__matricula = matricula
         self.__notas = notas if notas is not None else []
         self.disciplinas = disciplinas if disciplinas is not None else []
+        Aluno.total_alunos += 1
 
     #Para acessar os atributos privados
     @property

@@ -7,6 +7,7 @@ class Professor(Pessoa):
         super().__init__(nome, cpf, data_nascimento)
         self.__siape = siape
         self.disciplinas = disciplinas if disciplinas is not None else []
+        Professor.total_professores += 1
 
     @property
     def siape(self):
