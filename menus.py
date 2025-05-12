@@ -1,6 +1,7 @@
 from relatorios import *
 from cadastro import *
 from persistencia import *
+from relatorios import *
 
 def menu_alunos(lista_alunos, lista_disciplinas):
   while True:
@@ -19,12 +20,8 @@ def menu_alunos(lista_alunos, lista_disciplinas):
     if opcao == "1":
       print()
       print("1. Cadastrar novo aluno")
-      print()      
-      nome = input("Nome: ").title()
-      cpf = input("CPF: ")
-      data = input("Data de nascimento (dd/mm/aaaa): ")
-      matricula = input("Matrícula: ")
-      cadastrar_aluno(lista_alunos, nome, cpf, data, matricula)
+      print()  
+      cadastrar_aluno(lista_alunos)    
     elif opcao == "2":
       print()
       print("===2. Listar Alunos ===")
@@ -119,11 +116,7 @@ def menu_professores(lista_professores, lista_disciplinas):
       print()
       print("1. Cadastrar novo professor")
       print()
-      nome = input("Nome: ").title()
-      cpf = input("CPF: ")
-      data = input("Data de nascimento (dd/mm/aaaa): ")
-      siape = input("SIAPE: ")
-      cadastrar_professor(lista_professores, nome, cpf, data, siape)
+      cadastrar_professor(lista_professores)
     elif opcao == "2":
       print()
       print("2. Listar professores")
@@ -265,31 +258,29 @@ def menu_relatorios(lista_alunos, lista_professores, lista_disciplinas):
       print()
       print("1. Alunos aprovados")
       print()
-      for nome, disciplina, media in alunos_aprovados(lista_alunos):
-        print(f"{nome} - {disciplina} - Média: {media:.2f}")
+      alunos_aprovados(lista_alunos)
     elif opcao == "2":
       print()
       print("2. Alunos reprovados")
       print()
-      for nome, disciplina, media in alunos_reprovados(lista_alunos):
-        print(f"{nome} - {disciplina} - Média: {media:.2f}")
+      alunos_reprovados(lista_alunos)
     elif opcao == "3":
       print()
       print("3. Professores com muitos alunos")
       print()
-      for nome, total in professores_com_muitos_alunos(lista_professores):
-        print(f"{nome} - Total de alunos: {total}")
+      minimo_de_alunos = int(input("Informe o número mínimo de alunos: "))
+      professores_com_muitos_alunos(lista_professores, minimo_de_alunos)
     elif opcao == "4":
       print()
       print("4. Estatísticas gerais")
       print()
-      estat = estatisticas_gerais(lista_alunos, lista_professores, lista_disciplinas)
-      print(f"Total de alunos: {estat['total_alunos']}")
-      print(f"Total de professores: {estat['total_professores']}")
-      print(f"Total de disciplinas: {estat['total_disciplinas']}")
-      print("Médias por disciplina:")
-      for disc, media in estat['medias_por_disciplina'].items():
-        print(f"- {disc}: {media:.2f}")
+      estatisticas = estatisticas_gerais(lista_alunos, lista_professores, lista_disciplinas)
+      print()
+      print("Média da média dos alunos por disciplina:")
+      for disciplina, media in estatisticas['media_dos_alunos_por_disciplina'].items():
+          print(f"  {disciplina}: {media:.2f}")
+      print()
+
     elif opcao == "5":
       print("Voltando ao menu principal...")
       break
@@ -314,6 +305,7 @@ def menu_principal(lista_alunos, lista_professores, lista_disciplinas):
       menu_disciplinas(lista_disciplinas, lista_professores)
     elif opcao == "4":
       menu_relatorios(lista_alunos, lista_professores, lista_disciplinas)
+      estat = estatisticas_gerais(lista_alunos, lista_professores, lista_disciplinas)
     elif opcao == "5":
       print("Salvando dados e saindo...")
       salvar_alunos(lista_alunos, caminho_arquivo_alunos)

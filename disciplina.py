@@ -10,7 +10,7 @@ class Disciplina:
 
   @classmethod
   def exibir_total_cadastrados(cls):
-    print(f"Total de disciplinas cadastradas: {cls.total_disciplinas}")
+    return print(f"Total de disciplinas cadastradas: {cls.total_disciplinas}")
 
   def adicionar_professor(self, professor):
     if self.professor_responsavel:
