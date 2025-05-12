@@ -25,11 +25,18 @@ class Pessoa(ABC):
   @staticmethod
   def validar_data (data_nascimento):
     try:
-      datetime.strptime(data_nascimento, "%d/%m/%y")
+      datetime.strptime(data_nascimento, "%d/%m/%Y")
       return True
     except ValueError:
       return False
-          
+
+  @staticmethod
+  def formatar_cpf(cpf):
+    cpf = re.sub(r'\D', '', cpf)
+    if len(cpf) == 11:
+      return f"{cpf[:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}"
+    return cpf  
+        
   @abstractmethod
   def exibir_dados(self):
     pass

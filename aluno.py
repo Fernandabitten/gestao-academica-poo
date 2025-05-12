@@ -1,4 +1,5 @@
 from pessoa import Pessoa
+from datetime import datetime
 
 class Aluno(Pessoa):
     total_alunos = 0    #atributo de classe
@@ -25,7 +26,7 @@ class Aluno(Pessoa):
     
     @classmethod
     def exibir_total_cadastrados(cls):
-        print(f"Total de alunos cadastrados: {cls.total_alunos}")
+        return print(f"Total de alunos cadastrados: {cls.total_alunos}")
     
     def matricular_em_disciplina(self, disciplina):
         if disciplina not in self.disciplinas:
@@ -99,7 +100,11 @@ class Aluno(Pessoa):
     def exibir_dados(self):
         print(f"Aluno: {self.nome}")
         print(f"CPF: {self.cpf}")
-        print(f"Data de Nascimento: {self.data_nascimento}")
+        try:
+            data_formatada = datetime.strptime(self.data_nascimento, "%Y-%m-%d").strftime("%d/%m/%Y")
+        except ValueError:
+            data_formatada = self.data_nascimento  # caso esteja em outro formato
+        print(f"Data de Nascimento: {data_formatada}")
         print(f"Matrícula: {self.matricula}")
         print("Disciplinas:")
         for i, disciplina in enumerate(self.disciplinas):
